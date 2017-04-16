@@ -1,40 +1,21 @@
-from currency import Currency
-rates = {'USD': 1.0, 'EUR': 0.74, 'JPY': 120.0}
-
-
-class UnknownCurrencyCodeError(Exception):
-    pass
+from currency import *
 
 
 class CurrencyConverter:
 
-    def __init__(self, code, amount, symbol):
-        self.code = code
-        self.amount = amount
-        self.symbol = symbol
+    def __init__(self, cur_object, new_code):
+        self.currency = cur_object
+        self.code = new_code
+        self.rates = {'USD': 1.0, 'EUR': 0.74, 'JPY': 120}
 
-
-    # def is_same_type(self, other):
-    #     if self.code == other.code:
-    #         return True
-    #     else:
-    #         return False
-    #
-    # def sym_to_code(self):
-    #     if self.symbol == '$':
-    #         code = 'USD'
-    #     elif self.symbol == '€':
-    #         code = 'EUR'
-    #     elif self.symbol == '¥':
-    #         code = "JPY"
-    #     else:
-    #         return ValueError
-
-    def convert(self, convert_to):
-        if self.code in rates and convert_to in rates:
-            return (rates[convert_to] * self.amount / rates[self.code], convert_to)
-        else:
-            raise Exception(UnknownCurrencyCodeError)
-
-
-print(CurrencyConverter.convert(Currency(100, 'EUR'), 'JPY'))
+    def convert(self, cur_object, new_code):
+        if new_code in '$¥€' or new_code in ['USD', 'JPY', 'EUR']:
+            if new_code == '$':
+                new_code = 'USD'
+            elif new_code == '¥':
+                new_code = 'JPY'
+            elif new_code == '€':
+                new_code = 'EUR'
+            else:
+                raise Exception(UnknownCurrencyCodeError)
+        return Currency(cur_object.amount * self.rates[cur_object.code], new_code)

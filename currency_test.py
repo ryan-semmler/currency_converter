@@ -1,4 +1,4 @@
-import currency
+from currency import Currency, DifferentCurrencyCodeError
 
 def test_currency():
     assert Currency.currency('$40') == ('USD', 40)
@@ -9,17 +9,17 @@ def test_currency():
     assert Currency.currency(1000, 'JPY') == ('JPY', 1000)
 
 def test_eq():
-    assert Currency.__eq__(('USD', 40), ('USD', 40)) == True
-    assert Currency.__eq__(('USD', 40), ('USD', 41)) == False
-    assert Currency.__eq__(('EUR', 40), ('USD', 40)) == False
+    assert Currency(40, 'USD') == Currency(40, 'USD')
+    assert Currency(40, 'USD') != Currency(41, 'USD')
+    assert Currency(40, 'EUR') != Currency(40, 'USD')
 
 def test_add():
-    assert Currency.__add__(('USD', 40), ('USD', 41)) == ('USD', 81)
-    assert Currency.__add__(('USD', 40), ('JPY', 41)) == DifferentCurrencyCodeError
+    assert Currency(40, 'USD') + Currency(41, 'USD') == Currency(81, 'USD')
+    assert Currency(40, 'USD') + Currency(41, 'JPY') == DifferentCurrencyCodeError
 
 def test_sub():
-    assert Currency.__sub__(('USD', 40), ('USD', 39)) == ('USD', 1))
-    assert Currency.__sub__(('USD', 40), ('JPY', 39)) == DifferentCurrencyCodeError
+    assert Currency(40, 'USD') - Currency(39, 'USD') == Currency(1, 'USD')
+    assert Currency(40, 'USD') - Currency(39, 'JPY') == DifferentCurrencyCodeError
 
 def test_mul():
-    assert Currency.__mul__(('USD', 40), 5) == ('USD', 200)
+    assert Currency(40, 'USD') * 5 == Currency(200, 'USD')
